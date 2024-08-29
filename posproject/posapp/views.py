@@ -42,3 +42,29 @@ def items_detail(request, pk):
     elif request.method == 'DELETE':
         items.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+    
+@api_view(['GET', 'POST'])
+def items_makanan_list(request): 
+    if request.method == 'GET':
+        snippets = Item.objects.filter(id_kategori=1)
+        serializer = ItemSerializer(snippets, many=True)
+        return Response(serializer.data)
+    elif request.method == 'POST':
+        serializer = ItemSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+@api_view(['GET', 'POST'])
+def items_minuman_list(request): 
+    if request.method == 'GET':
+        snippets = Item.objects.filter(id_kategori=2)
+        serializer = ItemSerializer(snippets, many=True)
+        return Response(serializer.data)
+    elif request.method == 'POST':
+        serializer = ItemSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
