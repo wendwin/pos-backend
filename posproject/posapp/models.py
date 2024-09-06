@@ -25,9 +25,10 @@ class Pesanan(models.Model):
     pajak = models.DecimalField(max_digits=5, decimal_places=2, default=12.00)
     total = models.DecimalField(max_digits=10, decimal_places=2)
     status = models.CharField(max_length=50)
+    customer = models.CharField(max_length=50, null=True)
 
     def __str__(self):
-        return f"Pesanan {self.pesanan_id}"
+        return f"{self.id_pesanan}"
 
 class PesananItem(models.Model):
     id_pesanan_item = models.AutoField(primary_key=True)

@@ -2,7 +2,7 @@ from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from posapp.models import Item
-from posapp.serializers import ItemSerializer
+from posapp.serializers import ItemSerializer, PesananSerializer, PesananItemSerializer
 # Create your views here.
 
 @api_view(['GET', 'POST'])
@@ -68,3 +68,23 @@ def items_minuman_list(request):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+@api_view(['POST'])
+def create_pesanan(request):
+    pesanan_serializer = PesananSerializer(data=request.data)
+    if pesanan_serializer.is_valid():
+        pesanan = pesanan_serializer.save()
+        
+        pesanan_items_data = request.data.get('pesanan_items', [])
+        
+        for item_data in pesanan_items_data:
+            item_data['id_pesanan'] = pesanan.id_pesanan
+            item_serializer = PesananItemSerializer(data=item_data)
+            
+            if item_serializer.is_valid():
+                item_serializer.save()
+            else:
+                pesanan.delete()
+                return Response(item_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response([pesanan_serializer.data, item_serializer.data], status=status.HTTP_201_CREATED)
+    return Response(pesanan_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
