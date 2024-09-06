@@ -12,3 +12,13 @@ class ItemSerializer(serializers.ModelSerializer):
         model = Item
         fields = ['id_item', 'nama_item', 'nama_kategori', 'harga', 'gambar']
 
+class PesananSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Pesanan
+        fields = ['id_pesanan', 'tgl_pesanan', 'sub_total', 'pajak', 'total', 'status', 'customer']
+
+class PesananItemSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PesananItem
+        fields = ['id_pesanan_item', 'id_pesanan', 'id_item','quantity', 'harga_item', 'total_harga']
+
