@@ -1,7 +1,7 @@
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from posapp.models import Item
+from posapp.models import Item, Pesanan, PesananItem
 from posapp.serializers import ItemSerializer, PesananSerializer, PesananItemSerializer
 # Create your views here.
 
@@ -46,8 +46,8 @@ def items_detail(request, pk):
 @api_view(['GET', 'POST'])
 def items_makanan_list(request): 
     if request.method == 'GET':
-        snippets = Item.objects.filter(id_kategori=1)
-        serializer = ItemSerializer(snippets, many=True)
+        makannan_list = Item.objects.filter(id_kategori=1)
+        serializer = ItemSerializer(makannan_list, many=True)
         return Response(serializer.data)
     elif request.method == 'POST':
         serializer = ItemSerializer(data=request.data)
@@ -59,8 +59,8 @@ def items_makanan_list(request):
 @api_view(['GET', 'POST'])
 def items_minuman_list(request): 
     if request.method == 'GET':
-        snippets = Item.objects.filter(id_kategori=2)
-        serializer = ItemSerializer(snippets, many=True)
+        minuman_list = Item.objects.filter(id_kategori=2)
+        serializer = ItemSerializer(minuman_list, many=True)
         return Response(serializer.data)
     elif request.method == 'POST':
         serializer = ItemSerializer(data=request.data)
@@ -88,3 +88,16 @@ def create_pesanan(request):
                 return Response(item_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         return Response([pesanan_serializer.data, item_serializer.data], status=status.HTTP_201_CREATED)
     return Response(pesanan_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET'])
+def list_pesanan(request):
+    if request.method == 'GET':
+        list_pesanan = Pesanan.objects.all()
+        serializer = PesananSerializer(list_pesanan, many=True)
+        return Response(serializer.data)
+    elif request.method == 'POST':
+        serializer = PesananSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
