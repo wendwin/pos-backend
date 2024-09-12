@@ -17,7 +17,7 @@ class PesananSerializer(serializers.ModelSerializer):
     tgl_pesanan_format = serializers.SerializerMethodField()
     class Meta:
         model = Pesanan
-        fields = ['id_pesanan', 'tgl_pesanan_format', 'sub_total', 'pajak', 'total', 'status', 'customer']
+        fields = ['id_pesanan', 'tgl_pesanan_format', 'total', 'nominal_bayar', 'kembalian', 'status', 'customer']
 
     def get_tgl_pesanan_format(self, obj):
         return localtime(obj.tgl_pesanan).strftime('%Y-%m-%d %H:%M:%S')

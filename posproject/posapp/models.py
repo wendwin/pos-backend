@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils import timezone
 
 # Create your models here.
 class Kategori(models.Model):
@@ -21,9 +22,9 @@ class Item(models.Model):
 class Pesanan(models.Model):
     id_pesanan = models.AutoField(primary_key=True)
     tgl_pesanan = models.DateTimeField(auto_now_add=True)
-    sub_total = models.DecimalField(max_digits=10, decimal_places=2)
-    pajak = models.DecimalField(max_digits=5, decimal_places=2, default=12.00)
     total = models.DecimalField(max_digits=10, decimal_places=2)
+    nominal_bayar = models.DecimalField(max_digits=10, decimal_places=2, null=True)
+    kembalian = models.DecimalField(max_digits=10, decimal_places=2)
     status = models.CharField(max_length=50)
     customer = models.CharField(max_length=50, null=True)
 
