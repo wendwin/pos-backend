@@ -2,7 +2,7 @@ from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from posapp.models import Item, Pesanan, PesananItem
-from posapp.serializers import ItemSerializer, PesananSerializer, PesananItemSerializer
+from posapp.serializers import ItemSerializer, PesananSerializer, PesananDetailSerializer ,PesananItemSerializer
 # Create your views here.
 
 @api_view(['GET', 'POST'])
@@ -20,9 +20,6 @@ def items_list(request):
     
 @api_view(['GET', 'PUT', 'DELETE'])
 def items_detail(request, pk):
-    """
-    Retrieve, update or delete a code snippet.
-    """
     try:
         items = Item.objects.get(pk=pk)
     except Item.DoesNotExist:
@@ -101,3 +98,14 @@ def list_pesanan(request):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+@api_view(['GET'])
+def pesanan_detail(request, pk):
+    try:
+        pesanan = Pesanan.objects.get(pk=pk)
+    except Pesanan.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'GET':
+        serializer = PesananDetailSerializer(pesanan)
+        return Response(serializer.data)
